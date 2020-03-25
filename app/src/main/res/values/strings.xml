@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">weather forecast</string>
+    <string name="nullCityName">insert your city name</string>
+    <string name="mapBoxURL">https://api.mapbox.com/geocoding/v5/mapbox.places/</string>
+    <string name="accessToken">pk.eyJ1Ijoic2VwZWhyZmVsaSIsImEiOiJjazg3aXoyN3EwN3YxM29xc2gycTN5ZzNjIn0.AdvJO7MQfSRiZsy8Hc1SVg</string>
+    <string name="error_network_timeout">time out</string>
+    <string name="error_server">server error</string>
+    <string name="error_network">network error</string>
+    <string name="error_parse">parse error</string>
 </resources>
