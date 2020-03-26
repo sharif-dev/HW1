@@ -1,9 +1,10 @@
-package com.example.weatherforecast;
+package com.example.weatherforecast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,20 +22,19 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.example.weatherforecast.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
     private EditText city_name;
     private Button search_button;
     private ProgressBar progressBar;
-    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         search_button = (Button) findViewById(R.id.search);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        final Intent intent = new Intent(this, SecondActivity.class);
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,18 +53,16 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.nullCityName,
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    mapBoxCall();
+                    mapBoxCall(intent);
                 }
             }
         });
     }
 
-    public void mapBoxCall() {
+    public void mapBoxCall(final Intent intent) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = getString(R.string.mapBoxURL) + city_name.getText().toString()
-                + ".json?access_token=" + getString(R.string.accessToken);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
-                null, new Response.Listener<JSONObject>() {
+        String url = getString(R.string.mapBoxURL) + city_name.getText().toString() + ".json?access_token=" + getString(R.string.accessToken);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -74,9 +73,12 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject feature = jsonArray.getJSONObject(i);
                         JSONObject geometry = feature.getJSONObject("geometry");
                         JSONArray coordinates = geometry.getJSONArray("coordinates");
-                        longitudes[i] = coordinates.getString(0);
-                        latitudes[i] = coordinates.getString(1);
+                        longitudes[i] = coordinates.getString(1);
+                        latitudes[i] = coordinates.getString(0);
                     }
+                    intent.putExtra("CITY_NAME", city_name.getText().toString());
+                    intent.putExtra("LONGITUDES", longitudes);
+                    intent.putExtra("LATITUDES", latitudes);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -101,5 +103,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(request);
+        startActivity(intent);
     }
 }
