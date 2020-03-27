@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    Log.d("KAZEM", response.toString());
                     JSONArray jsonArray = response.getJSONArray("features");
                     String[] place_names = new String[jsonArray.length()];
                     String[] longitudes = new String[jsonArray.length()];
