@@ -3,10 +3,13 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
+
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.RecyclerViewAdapter;
 import com.example.weatherforecast.model.City;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +26,12 @@ public class SecondActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         lstCity = new ArrayList<>();
 
-        String city_name = getIntent().getStringExtra("CITY_NAME");
+        String[] city_names = getIntent().getStringArrayExtra("CITY_NAMES");
         String[] longitudes = getIntent().getStringArrayExtra("LONGITUDES");
         String[] latitudes = getIntent().getStringArrayExtra("LATITUDES");
         for (int i = 0; i < longitudes.length; i++) {
             City city = new City();
-            city.setName(city_name);
+            city.setName(city_names[i]);
             city.setLongitude(longitudes[i]);
             city.setLatitude(latitudes[i]);
             lstCity.add(city);

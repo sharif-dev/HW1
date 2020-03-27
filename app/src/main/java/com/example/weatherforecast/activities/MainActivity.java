@@ -1,6 +1,7 @@
 package com.example.weatherforecast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -21,10 +23,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherforecast.R;
+import com.google.gson.JsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -62,17 +65,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
+                    Log.d("KAZEM", response.toString());
                     JSONArray jsonArray = response.getJSONArray("features");
+                    String[] place_names = new String[jsonArray.length()];
                     String[] longitudes = new String[jsonArray.length()];
                     String[] latitudes = new String[jsonArray.length()];
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject feature = jsonArray.getJSONObject(i);
                         JSONObject geometry = feature.getJSONObject("geometry");
+                        place_names[i] = feature.getString("place_name");
                         JSONArray coordinates = geometry.getJSONArray("coordinates");
                         longitudes[i] = coordinates.getString(1);
                         latitudes[i] = coordinates.getString(0);
                     }
-                    intent.putExtra("CITY_NAME", city_name.getText().toString());
+                    intent.putExtra("CITY_NAMES", place_names);
                     intent.putExtra("LONGITUDES", longitudes);
                     intent.putExtra("LATITUDES", latitudes);
 

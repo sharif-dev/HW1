@@ -33,6 +33,7 @@
             android:layout_marginLeft="20dp"
             android:layout_toLeftOf="@id/city_name_text_view"
             android:background="@drawable/layout_bg"
+            android:gravity="center"
             android:padding="16dp"
             android:textColor="@color/black" />
     </RelativeLayout>
