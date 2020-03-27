@@ -29,6 +29,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.InetAddress;
+
 
 public class MainActivity extends AppCompatActivity {
     private EditText city_name;
@@ -60,8 +62,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void mapBoxCall(final Intent intent) {
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = getString(R.string.mapBoxURL) + city_name.getText().toString() + ".json?access_token=" + getString(R.string.accessToken);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        String url = getString(R.string.mapBoxURL) + city_name.getText().toString()
+                + ".json?access_token=" + getString(R.string.mapBoxAccessToken);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
+                null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
