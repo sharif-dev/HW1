@@ -1,16 +1,14 @@
 package com.example.weatherforecast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -23,12 +21,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherforecast.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -79,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("CITY_NAME", city_name.getText().toString());
                     intent.putExtra("LONGITUDES", longitudes);
                     intent.putExtra("LATITUDES", latitudes);
+
+                    startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -103,6 +101,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         queue.add(request);
-        startActivity(intent);
+
     }
 }
