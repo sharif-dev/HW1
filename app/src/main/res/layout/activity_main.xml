@@ -43,7 +43,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="180dp"
-        android:indeterminateTint="@color/white" />
+        android:indeterminateTint="@color/white"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/search"
