@@ -3,6 +3,8 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,14 +20,11 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherforecast.Listeners.RecyclerItemClickListener;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.RecyclerViewAdapter;
 import com.example.weatherforecast.model.City;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -68,35 +67,81 @@ public class SecondActivity extends AppCompatActivity {
         );
     }
 
+    private void DarkSkyCall(int position){
+
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        String url = getString(R.string.DarkSkyURL) +
+                getString(R.string.DarkSkySecretKey) + "/" +
+                lstCity.get(position).getLatitude() + "," +
+                lstCity.get(position).getLongitude();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try{
+                            String[] summaries = new String[8];
+                            String[] humidities = new String[8];
+                            String[] pressures = new String[8];
+                            String[] temperaturesHigh = new String[8];
+                            String[] temperaturesLow = new String[8];
+
+                            JSONObject current = response.getJSONObject("currently");
+                            summaries[0] = current.getString("summary");
+                            humidities[0] = current.get("humidity").toString();
+                            pressures[0] = current.get("pressure").toString();
+                            temperaturesHigh[0] = current.get("temperature").toString();
+                            temperaturesLow[0] = current.get("temperature").toString();
+
+                            JSONArray data = response.getJSONObject("daily").getJSONArray("data");
+                            for(int i = 0; i < 7; i++){
+                                summaries[i + 1] = data.getJSONObject(i).getString("summary");
+                                humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
+                                pressures[i + 1] = data.getJSONObject(i).get("pressure").toString();
+                                temperaturesHigh[i + 1] = data.getJSONObject(i).get("temperatureHigh").toString();
+                                temperaturesLow[i + 1] = data.getJSONObject(i).get("temperatureLow").toString();
+                            }
+//                            goFinalPage(summaries, humidities, pressures, temperaturesHigh, temperaturesLow);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                    Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
+                            Toast.LENGTH_LONG).show();
+                } else if (error instanceof ServerError) {
+                    Toast.makeText(getApplicationContext(), R.string.error_server,
+                            Toast.LENGTH_LONG).show();
+                } else if (error instanceof NetworkError) {
+                    Toast.makeText(getApplicationContext(), R.string.error_network,
+                            Toast.LENGTH_LONG).show();
+                } else if (error instanceof ParseError) {
+                    Toast.makeText(getApplicationContext(), R.string.error_parse,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+        queue.add(request);
+    }
+
+    private void goFinalPage(String[] summaries, String[] humidities, String[] pressures,
+                             String[] temperaturesHigh, String[] temperaturesLow){
+        Intent intent = new Intent(this, ThirdActivity.class);
+        intent.putExtra("SUMMARIES", summaries);
+        intent.putExtra("HUMIDITIES", humidities);
+        intent.putExtra("PRESSURES", pressures);
+        intent.putExtra("TEMPERATURESHIGH", temperaturesHigh);
+        intent.putExtra("TEMPERATURESLOW", temperaturesLow);
+
+        startActivity(intent);
+    }
+
     private void setupRecyclerView(List<City> lstCity) {
         RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lstCity);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setAdapter(myAdapter);
-    }
-
-    private void DarkSkyCall(int position){
-
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        String url = getString(R.string.DarkSkyURL) + getString(R.string.DarkSkySecretKey)
-                + "/" + lstCity.get(position).getLatitude()  + "," + lstCity.get(position).getLongitude();
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
-                null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                //TODO
-                Toast.makeText(getApplicationContext(), response.toString(),
-                        Toast.LENGTH_LONG).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //TODO
-                Toast.makeText(getApplicationContext(), error.getCause().toString(),
-                    Toast.LENGTH_LONG).show();
-            }
-        });
-        queue.add(request);
     }
 }
