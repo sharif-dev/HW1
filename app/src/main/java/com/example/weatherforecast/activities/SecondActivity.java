@@ -82,8 +82,8 @@ public class SecondActivity extends AppCompatActivity {
                             String[] summaries = new String[8];
                             String[] humidities = new String[8];
                             String[] pressures = new String[8];
-                            String[] temperaturesHigh = new String[8];
-                            String[] temperaturesLow = new String[8];
+                            String[] temperaturesMax = new String[8];
+                            String[] temperaturesMin = new String[8];
                             String[] icons = new String[8];
 
                             JSONObject current = response.getJSONObject("currently");
@@ -91,8 +91,8 @@ public class SecondActivity extends AppCompatActivity {
                             icons[0] = current.getString("icon");
                             humidities[0] = current.get("humidity").toString();
                             pressures[0] = current.get("pressure").toString();
-                            temperaturesHigh[0] =fahrenheitToCelsius(current.getDouble("temperature"));
-                            temperaturesLow[0] = temperaturesHigh[0];
+                            temperaturesMax[0] =fahrenheitToCelsius(current.getDouble("temperature"));
+                            temperaturesMin[0] = temperaturesMax[0];
 
                             JSONArray data = response.getJSONObject("daily").getJSONArray("data");
                             for(int i = 0; i < 7; i++){
@@ -100,11 +100,11 @@ public class SecondActivity extends AppCompatActivity {
                                 icons[i + 1] = data.getJSONObject(i).getString("icon");
                                 humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
                                 pressures[i + 1] = data.getJSONObject(i).get("pressure").toString();
-                                temperaturesHigh[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureHigh"));
-                                temperaturesLow[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureLow"));
+                                temperaturesMax[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
+                                temperaturesMin[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
                             }
 
-//                            goFinalPage(summaries, icons, humidities, pressures, temperaturesHigh, temperaturesLow);
+//                            goFinalPage(summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
@@ -131,14 +131,14 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void goFinalPage(String[] summaries, String[] icons, String[] humidities,
-                         String[] pressures, String[] temperaturesHigh, String[] temperaturesLow){
+                         String[] pressures, String[] temperaturesMax, String[] temperaturesMin){
         Intent intent = new Intent(this, ThirdActivity.class);
         intent.putExtra("SUMMARIES", summaries);
         intent.putExtra("ICONS", icons);
         intent.putExtra("HUMIDITIES", humidities);
         intent.putExtra("PRESSURES", pressures);
-        intent.putExtra("TEMPERATURESHIGH", temperaturesHigh);
-        intent.putExtra("TEMPERATURESLOW", temperaturesLow);
+        intent.putExtra("TEMPERATURESMAX", temperaturesMax);
+        intent.putExtra("TEMPERATURESMIN", temperaturesMin);
 
         startActivity(intent);
     }

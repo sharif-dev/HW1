@@ -1,8 +1,6 @@
 package com.example.weatherforecast.model;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -10,7 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.weatherforecast.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,8 +25,8 @@ public class DarkSky {
     private String[] icons;
     private String[] humidities;
     private String[] pressures;
-    private String[] temperaturesHigh;
-    private String[] temperaturesLow;
+    private String[] temperaturesMax;
+    private String[] temperaturesMin;
 
 
     public DarkSky(){
@@ -36,8 +34,8 @@ public class DarkSky {
         icons = new String[8];
         humidities = new String[8];
         pressures = new String[8];
-        temperaturesHigh = new String[8];
-        temperaturesLow = new String[8];
+        temperaturesMax = new String[8];
+        temperaturesMin = new String[8];
     }
 
     public void setUrl(String latitude, String longitude){
@@ -80,12 +78,12 @@ public class DarkSky {
         return pressures;
     }
 
-    public String[] getTemperaturesHigh() {
-        return temperaturesHigh;
+    public String[] getTemperaturesMax() {
+        return temperaturesMax;
     }
 
-    public String[] getTemperaturesLow() {
-        return temperaturesLow;
+    public String[] getTemperaturesMin() {
+        return temperaturesMin;
     }
 
     public void call(Context context){
@@ -120,10 +118,8 @@ public class DarkSky {
             summaries[0] = current.getString("summary");
             humidities[0] = current.get("humidity").toString();
             pressures[0] = current.get("pressure").toString();
-            this.temperaturesHigh[0] = current.get("temperature").toString();
-            temperaturesLow[0] = current.get("temperature").toString();
-
-            Log.d("CUCUCUCUCUCUCU", temperaturesHigh[0]);
+            this.temperaturesMax[0] = current.get("temperature").toString();
+            temperaturesMin[0] = current.get("temperature").toString();
         }catch (JSONException e){
             e.printStackTrace();
         }
@@ -136,10 +132,8 @@ public class DarkSky {
                 summaries[i + 1] = data.getJSONObject(i).getString("summary");
                 humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
                 pressures[i + 1] = data.getJSONObject(i).get("pressure").toString();
-                this.temperaturesHigh[i + 1] = data.getJSONObject(i).get("temperatureHigh").toString();
-                temperaturesLow[i + 1] = data.getJSONObject(i).get("temperatureLow").toString();
-
-                Log.d("DADADADADADA", temperaturesHigh[1]);
+                this.temperaturesMax[i + 1] = data.getJSONObject(i).get("temperatureHigh").toString();
+                temperaturesMin[i + 1] = data.getJSONObject(i).get("temperatureLow").toString();
             }
         }catch (JSONException e){
             e.printStackTrace();
