@@ -89,17 +89,18 @@ public class SecondActivity extends AppCompatActivity {
                             summaries[0] = current.getString("summary");
                             humidities[0] = current.get("humidity").toString();
                             pressures[0] = current.get("pressure").toString();
-                            temperaturesHigh[0] = current.get("temperature").toString();
-                            temperaturesLow[0] = current.get("temperature").toString();
+                            temperaturesHigh[0] =fahrenheitToCelsius(current.getDouble("temperature"));
+                            temperaturesLow[0] = temperaturesHigh[0];
 
                             JSONArray data = response.getJSONObject("daily").getJSONArray("data");
                             for(int i = 0; i < 7; i++){
                                 summaries[i + 1] = data.getJSONObject(i).getString("summary");
                                 humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
                                 pressures[i + 1] = data.getJSONObject(i).get("pressure").toString();
-                                temperaturesHigh[i + 1] = data.getJSONObject(i).get("temperatureHigh").toString();
-                                temperaturesLow[i + 1] = data.getJSONObject(i).get("temperatureLow").toString();
+                                temperaturesHigh[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureHigh"));
+                                temperaturesLow[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureLow"));
                             }
+
 //                            goFinalPage(summaries, humidities, pressures, temperaturesHigh, temperaturesLow);
                         }catch (JSONException e){
                             e.printStackTrace();
@@ -143,5 +144,9 @@ public class SecondActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setAdapter(myAdapter);
+    }
+
+    public String fahrenheitToCelsius(Double temperature){
+        return Integer.toString( (int) Math.round((temperature - 32) * 5 / 9));
     }
 }
