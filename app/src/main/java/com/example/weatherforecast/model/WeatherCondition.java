@@ -7,6 +7,8 @@ public class WeatherCondition {
     private String pressure;
     private String humidity;
     private String icon;
+    private String day;
+    private String date;
 
     public WeatherCondition() {
     }
@@ -57,5 +59,21 @@ public class WeatherCondition {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }
