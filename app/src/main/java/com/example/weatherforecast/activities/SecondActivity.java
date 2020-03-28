@@ -84,9 +84,11 @@ public class SecondActivity extends AppCompatActivity {
                             String[] pressures = new String[8];
                             String[] temperaturesHigh = new String[8];
                             String[] temperaturesLow = new String[8];
+                            String[] icons = new String[8];
 
                             JSONObject current = response.getJSONObject("currently");
                             summaries[0] = current.getString("summary");
+                            icons[0] = current.getString("icon");
                             humidities[0] = current.get("humidity").toString();
                             pressures[0] = current.get("pressure").toString();
                             temperaturesHigh[0] =fahrenheitToCelsius(current.getDouble("temperature"));
@@ -95,13 +97,14 @@ public class SecondActivity extends AppCompatActivity {
                             JSONArray data = response.getJSONObject("daily").getJSONArray("data");
                             for(int i = 0; i < 7; i++){
                                 summaries[i + 1] = data.getJSONObject(i).getString("summary");
+                                icons[i + 1] = data.getJSONObject(i).getString("icon");
                                 humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
                                 pressures[i + 1] = data.getJSONObject(i).get("pressure").toString();
                                 temperaturesHigh[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureHigh"));
                                 temperaturesLow[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureLow"));
                             }
 
-//                            goFinalPage(summaries, humidities, pressures, temperaturesHigh, temperaturesLow);
+//                            goFinalPage(summaries, icons, humidities, pressures, temperaturesHigh, temperaturesLow);
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
@@ -127,10 +130,11 @@ public class SecondActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void goFinalPage(String[] summaries, String[] humidities, String[] pressures,
-                             String[] temperaturesHigh, String[] temperaturesLow){
+    private void goFinalPage(String[] summaries, String[] icons, String[] humidities,
+                         String[] pressures, String[] temperaturesHigh, String[] temperaturesLow){
         Intent intent = new Intent(this, ThirdActivity.class);
         intent.putExtra("SUMMARIES", summaries);
+        intent.putExtra("ICONS", icons);
         intent.putExtra("HUMIDITIES", humidities);
         intent.putExtra("PRESSURES", pressures);
         intent.putExtra("TEMPERATURESHIGH", temperaturesHigh);

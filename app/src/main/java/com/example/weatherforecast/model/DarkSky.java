@@ -24,6 +24,7 @@ public class DarkSky {
     private boolean dailycheck = true;
 
     private String[] summaries;
+    private String[] icons;
     private String[] humidities;
     private String[] pressures;
     private String[] temperaturesHigh;
@@ -32,6 +33,7 @@ public class DarkSky {
 
     public DarkSky(){
         summaries = new String[8];
+        icons = new String[8];
         humidities = new String[8];
         pressures = new String[8];
         temperaturesHigh = new String[8];
@@ -64,6 +66,10 @@ public class DarkSky {
 
     public String[] getSummaries() {
         return summaries;
+    }
+
+    public String[] getIcons() {
+        return icons;
     }
 
     public String[] getHumidities() {
