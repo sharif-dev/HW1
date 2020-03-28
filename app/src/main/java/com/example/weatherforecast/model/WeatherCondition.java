@@ -6,6 +6,7 @@ public class WeatherCondition {
     private String temperatureLow;
     private String pressure;
     private String humidity;
+    private String icon;
 
     public WeatherCondition() {
     }
@@ -48,5 +49,13 @@ public class WeatherCondition {
 
     public void setHumidity(String humidity) {
         this.humidity = humidity;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }
