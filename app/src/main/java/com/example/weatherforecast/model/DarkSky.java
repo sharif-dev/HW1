@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public class DarkSky {
     private String url = "https://api.darksky.net/forecast/" +
             "c0363c434af5d6b11a443146e9bc0337";
-    private boolean currentlycheck = true;
+    private boolean currentlycheck = false;
     private boolean minutelycheck = false;
     private boolean hourlycheck = false;
     private boolean dailycheck = true;
@@ -30,12 +30,12 @@ public class DarkSky {
 
 
     public DarkSky(){
-        summaries = new String[8];
-        icons = new String[8];
-        humidities = new String[8];
-        pressures = new String[8];
-        temperaturesMax = new String[8];
-        temperaturesMin = new String[8];
+        summaries = new String[7];
+        icons = new String[7];
+        humidities = new String[7];
+        pressures = new String[7];
+        temperaturesMax = new String[7];
+        temperaturesMin = new String[7];
     }
 
     public void setUrl(String latitude, String longitude){
@@ -129,11 +129,11 @@ public class DarkSky {
         try{
             JSONArray data = response.getJSONObject("daily").getJSONArray("data");
             for(int i = 0; i < 7; i++){
-                summaries[i + 1] = data.getJSONObject(i).getString("summary");
-                humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
-                pressures[i + 1] = data.getJSONObject(i).get("pressure").toString();
-                this.temperaturesMax[i + 1] = data.getJSONObject(i).get("temperatureHigh").toString();
-                temperaturesMin[i + 1] = data.getJSONObject(i).get("temperatureLow").toString();
+                summaries[i] = data.getJSONObject(i).getString("summary");
+                humidities[i] = data.getJSONObject(i).get("humidity").toString();
+                pressures[i] = data.getJSONObject(i).get("pressure").toString();
+                this.temperaturesMax[i] = data.getJSONObject(i).get("temperatureHigh").toString();
+                temperaturesMin[i] = data.getJSONObject(i).get("temperatureLow").toString();
             }
         }catch (JSONException e){
             e.printStackTrace();

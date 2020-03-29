@@ -78,32 +78,23 @@ public class SecondActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         try{
-                            String[] summaries = new String[8];
-                            String[] humidities = new String[8];
-                            String[] pressures = new String[8];
-                            String[] temperaturesMax = new String[8];
-                            String[] temperaturesMin = new String[8];
-                            String[] icons = new String[8];
-                            String[] times = new String[8];
-
-                            JSONObject current = response.getJSONObject("currently");
-                            times[0] = current.get("time").toString();
-                            summaries[0] = current.getString("summary");
-                            icons[0] = current.getString("icon");
-                            humidities[0] = current.get("humidity").toString();
-                            pressures[0] = current.get("pressure").toString();
-                            temperaturesMax[0] =fahrenheitToCelsius(current.getDouble("temperature"));
-                            temperaturesMin[0] = temperaturesMax[0];
+                            String[] summaries = new String[7];
+                            String[] humidities = new String[7];
+                            String[] pressures = new String[7];
+                            String[] temperaturesMax = new String[7];
+                            String[] temperaturesMin = new String[7];
+                            String[] icons = new String[7];
+                            String[] times = new String[7];
 
                             JSONArray data = response.getJSONObject("daily").getJSONArray("data");
                             for(int i = 0; i < 7; i++){
-                                times[i + 1] = data.getJSONObject(i).get("time").toString();
-                                summaries[i + 1] = data.getJSONObject(i).getString("summary");
-                                icons[i + 1] = data.getJSONObject(i).getString("icon");
-                                humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
-                                pressures[i + 1] = data.getJSONObject(i).get("pressure").toString();
-                                temperaturesMax[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
-                                temperaturesMin[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
+                                times[i] = data.getJSONObject(i).get("time").toString();
+                                summaries[i] = data.getJSONObject(i).getString("summary");
+                                icons[i] = data.getJSONObject(i).getString("icon");
+                                humidities[i] = data.getJSONObject(i).get("humidity").toString();
+                                pressures[i] = data.getJSONObject(i).get("pressure").toString();
+                                temperaturesMax[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
+                                temperaturesMin[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
                             }
 
                             goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
