@@ -12,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".activities.ThirdActivity"></activity>
+        <activity android:name=".activities.ThirdActivity" />
         <activity android:name=".activities.SecondActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>

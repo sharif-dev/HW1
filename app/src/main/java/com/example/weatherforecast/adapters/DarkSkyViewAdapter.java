@@ -57,8 +57,8 @@ public class DarkSkyViewAdapter extends RecyclerView.Adapter<DarkSkyViewAdapter.
         holder.day.setText(mData.get(position).getDay());
         holder.date.setText(mData.get(position).getDate());
         holder.summary.setText(mData.get(position).getSummary());
-        holder.temperatureMax.setText(mData.get(position).getTemperatureHigh());
-        holder.temperatureMin.setText(mData.get(position).getTemperatureLow());
+        holder.temperatureMax.setText(mData.get(position).getTemperatureMax());
+        holder.temperatureMin.setText(mData.get(position).getTemperatureMin());
         holder.humidity.setText(mData.get(position).getHumidity());
         holder.pressure.setText(mData.get(position).getPressure());
     }

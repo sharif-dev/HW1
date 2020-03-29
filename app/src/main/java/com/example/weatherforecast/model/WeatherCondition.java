@@ -2,8 +2,8 @@ package com.example.weatherforecast.model;
 
 public class WeatherCondition {
     private String summary;
-    private String temperatureHigh;
-    private String temperatureLow;
+    private String temperatureMax;
+    private String temperatureMin;
     private String pressure;
     private String humidity;
     private String icon;
@@ -21,20 +21,20 @@ public class WeatherCondition {
         this.summary = summary;
     }
 
-    public String getTemperatureHigh() {
-        return temperatureHigh;
+    public String getTemperatureMax() {
+        return temperatureMax;
     }
 
-    public void setTemperatureHigh(String temperatureHigh) {
-        this.temperatureHigh = temperatureHigh;
+    public void setTemperatureMax(String temperatureMax) {
+        this.temperatureMax = temperatureMax;
     }
 
-    public String getTemperatureLow() {
-        return temperatureLow;
+    public String getTemperatureMin() {
+        return temperatureMin;
     }
 
-    public void setTemperatureLow(String temperatureLow) {
-        this.temperatureLow = temperatureLow;
+    public void setTemperatureMin(String temperatureMin) {
+        this.temperatureMin = temperatureMin;
     }
 
     public String getPressure() {

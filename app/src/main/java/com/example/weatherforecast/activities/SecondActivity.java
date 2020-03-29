@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -85,8 +84,10 @@ public class SecondActivity extends AppCompatActivity {
                             String[] temperaturesMax = new String[8];
                             String[] temperaturesMin = new String[8];
                             String[] icons = new String[8];
+                            String[] times = new String[8];
 
                             JSONObject current = response.getJSONObject("currently");
+                            times[0] = current.get("time").toString();
                             summaries[0] = current.getString("summary");
                             icons[0] = current.getString("icon");
                             humidities[0] = current.get("humidity").toString();
@@ -96,6 +97,7 @@ public class SecondActivity extends AppCompatActivity {
 
                             JSONArray data = response.getJSONObject("daily").getJSONArray("data");
                             for(int i = 0; i < 7; i++){
+                                times[i + 1] = data.getJSONObject(i).get("time").toString();
                                 summaries[i + 1] = data.getJSONObject(i).getString("summary");
                                 icons[i + 1] = data.getJSONObject(i).getString("icon");
                                 humidities[i + 1] = data.getJSONObject(i).get("humidity").toString();
@@ -104,7 +106,7 @@ public class SecondActivity extends AppCompatActivity {
                                 temperaturesMin[i + 1] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
                             }
 
-//                            goFinalPage(summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
+                            goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
@@ -130,9 +132,10 @@ public class SecondActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void goFinalPage(String[] summaries, String[] icons, String[] humidities,
+    private void goFinalPage(String[] times, String[] summaries, String[] icons, String[] humidities,
                          String[] pressures, String[] temperaturesMax, String[] temperaturesMin){
         Intent intent = new Intent(this, ThirdActivity.class);
+        intent.putExtra("TIMES", times);
         intent.putExtra("SUMMARIES", summaries);
         intent.putExtra("ICONS", icons);
         intent.putExtra("HUMIDITIES", humidities);
@@ -140,6 +143,7 @@ public class SecondActivity extends AppCompatActivity {
         intent.putExtra("TEMPERATURESMAX", temperaturesMax);
         intent.putExtra("TEMPERATURESMIN", temperaturesMin);
 
+        intent.putExtra("ISCONNECTED", true);
         startActivity(intent);
     }
 
