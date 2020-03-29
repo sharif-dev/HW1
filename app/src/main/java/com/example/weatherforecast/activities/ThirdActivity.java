@@ -3,12 +3,18 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.DarkSkyViewAdapter;
 import com.example.weatherforecast.model.WeatherCondition;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class ThirdActivity extends AppCompatActivity {
@@ -26,10 +32,9 @@ public class ThirdActivity extends AppCompatActivity {
         lstWeathers = new ArrayList<>();
         sharedPreferences = getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE);
 
-        if(getIntent().getBooleanExtra("ISCONNECTED", true)){
+        if (getIntent().getBooleanExtra("ISCONNECTED", true)) {
             initialize();
-        }
-        else{
+        } else {
             lastSeen();
         }
         setupRecyclerView(lstWeathers);
@@ -41,7 +46,7 @@ public class ThirdActivity extends AppCompatActivity {
         save();
     }
 
-    private void initialize(){
+    private void initialize() {
         String[] times = getIntent().getStringArrayExtra("TIMES");  //TODO
         String[] summaries = getIntent().getStringArrayExtra("SUMMARIES");
         String[] icons = getIntent().getStringArrayExtra("ICONS");
@@ -50,9 +55,16 @@ public class ThirdActivity extends AppCompatActivity {
         String[] temperaturesMax = getIntent().getStringArrayExtra("TEMPERATURESMAX");
         String[] temperaturesMin = getIntent().getStringArrayExtra("TEMPERATURESMIN");
         for (int i = 0; i < summaries.length; i++) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR, i);
+            Date date = calendar.getTime();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+            String day = simpleDateFormat.format(date);
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+            String ourDate = simpleDateFormat1.format(date);
             WeatherCondition weatherCondition = new WeatherCondition();
-            weatherCondition.setDate("TODO");//TODO
-            weatherCondition.setDay("TODO");//TODO
+            weatherCondition.setDate(ourDate);
+            weatherCondition.setDay(day);
             weatherCondition.setSummary(summaries[i]);
             weatherCondition.setIcon(icons[i]);
             weatherCondition.setHumidity(humidities[i]);
@@ -64,8 +76,8 @@ public class ThirdActivity extends AppCompatActivity {
         }
     }
 
-    private void lastSeen(){
-        for(int i = 0 ; i < 7; i++){
+    private void lastSeen() {
+        for (int i = 0; i < 7; i++) {
             String[] weather = sharedPreferences.getString("weather" + Integer.toString(i),
                     null).split(getString(R.string.split_In_Filing));
             WeatherCondition weatherCondition = new WeatherCondition();
@@ -82,10 +94,10 @@ public class ThirdActivity extends AppCompatActivity {
         }
     }
 
-    private void save(){
+    private void save() {
         SharedPreferences.Editor editor = sharedPreferences.edit().clear();
 
-        for(int i = 0; i < lstWeathers.size(); i++){
+        for (int i = 0; i < lstWeathers.size(); i++) {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(lstWeathers.get(i).getDate() + getString(R.string.split_In_Filing));
             stringBuilder.append(lstWeathers.get(i).getDay() + getString(R.string.split_In_Filing));
