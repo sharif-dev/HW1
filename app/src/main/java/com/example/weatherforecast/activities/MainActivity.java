@@ -71,8 +71,8 @@ public class MainActivity extends AppCompatActivity {
                         JSONObject geometry = feature.getJSONObject("geometry");
                         place_names[i] = feature.getString("place_name");
                         JSONArray coordinates = geometry.getJSONArray("coordinates");
-                        longitudes[i] = coordinates.getString(1);
-                        latitudes[i] = coordinates.getString(0);
+                        longitudes[i] = coordinates.getString(0);
+                        latitudes[i] = coordinates.getString(1);
                     }
                     intent.putExtra("CITY_NAMES", place_names);
                     intent.putExtra("LONGITUDES", longitudes);
