@@ -1,7 +1,11 @@
 package com.example.weatherforecast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -39,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         search_button = (Button) findViewById(R.id.search);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        checkInternetConnection();
+
         final Intent intent = new Intent(this, SecondActivity.class);
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +59,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void checkInternetConnection(){
+        ConnectivityManager cm =
+            (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()){
+            checkHistory();
+        }
+    }
+
+    public void checkHistory(){
+        if(getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE).getAll().size() == 0){
+            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                    Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                    Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ThirdActivity.class);
+            intent.putExtra("ISCONNECTED", false);
+            startActivity(intent);
+        }
+    }
+
     public void mapBoxCall(final Intent intent) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = getString(R.string.mapBoxURL) + city_name.getText().toString()
@@ -63,6 +93,12 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray jsonArray = response.getJSONArray("features");
+                    if(jsonArray.length() == 0){
+                        Toast.makeText(getApplicationContext(), R.string.ValidCity,
+                                Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     String[] place_names = new String[jsonArray.length()];
                     String[] longitudes = new String[jsonArray.length()];
                     String[] latitudes = new String[jsonArray.length()];
@@ -87,22 +123,24 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                if ( error instanceof NoConnectionError ){
+                    Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                            Toast.LENGTH_SHORT).show();
+                } else if (error instanceof TimeoutError ) {
                     Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 } else if (error instanceof ServerError) {
                     Toast.makeText(getApplicationContext(), R.string.error_server,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 } else if (error instanceof NetworkError) {
                     Toast.makeText(getApplicationContext(), R.string.error_network,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 } else if (error instanceof ParseError) {
                     Toast.makeText(getApplicationContext(), R.string.error_parse,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
         queue.add(request);
-
     }
 }

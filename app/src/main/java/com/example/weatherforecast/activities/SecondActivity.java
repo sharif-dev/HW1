@@ -103,18 +103,21 @@ public class SecondActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error instanceof TimeoutError || error instanceof NoConnectionError) {
+                if ( error instanceof NoConnectionError ){
+                    Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                            Toast.LENGTH_SHORT).show();
+                } else if (error instanceof TimeoutError ) {
                     Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 } else if (error instanceof ServerError) {
                     Toast.makeText(getApplicationContext(), R.string.error_server,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 } else if (error instanceof NetworkError) {
                     Toast.makeText(getApplicationContext(), R.string.error_network,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 } else if (error instanceof ParseError) {
                     Toast.makeText(getApplicationContext(), R.string.error_parse,
-                            Toast.LENGTH_LONG).show();
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
