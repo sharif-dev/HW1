@@ -3,15 +3,10 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
-
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.DarkSkyViewAdapter;
-import com.example.weatherforecast.adapters.RecyclerViewAdapter;
-import com.example.weatherforecast.model.City;
 import com.example.weatherforecast.model.WeatherCondition;
-
 import java.util.ArrayList;
 import java.util.List;
 
