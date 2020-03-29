@@ -96,6 +96,9 @@ public class DarkSkyViewAdapter extends RecyclerView.Adapter<DarkSkyViewAdapter.
             case "partly-cloudy-night":
                 linearLayout.setBackgroundResource(R.drawable.partly_cloudy_night);
                 break;
+            case "wind":
+                linearLayout.setBackgroundResource(R.drawable.wind);
+                break;
         }
     }
 
