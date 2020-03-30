@@ -13,4 +13,6 @@
     <string name="NoNetworkConnection">No Network Connection</string>
     <string name="SharedPreferencesInstance">mySharedPref</string>
     <string name="ValidCity">No Such City</string>
+    <string name="dayFormat">EEEE</string>
+    <string name="dateFormat">yyyy-MM-dd</string>
 </resources>

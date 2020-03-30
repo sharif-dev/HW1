@@ -1,7 +1,6 @@
 package com.example.weatherforecast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -12,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -25,7 +23,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherforecast.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
 
         checkInternetConnection();
 
-        final Intent intent = new Intent(this, SecondActivity.class);
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.nullCityName,
                             Toast.LENGTH_SHORT).show();
                 } else {
-                    mapBoxCall(intent);
+                    mapBoxCall();
                 }
             }
         });
@@ -63,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkInternetConnection() {
         ConnectivityManager cm =
-                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
@@ -82,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void mapBoxCall(final Intent intent) {
+    private void mapBoxCall() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = getString(R.string.mapBoxURL) + city_name.getText().toString()
                 + ".json?access_token=" + getString(R.string.mapBoxAccessToken);
@@ -90,56 +86,69 @@ public class MainActivity extends AppCompatActivity {
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    JSONArray jsonArray = response.getJSONArray("features");
-                    if (jsonArray.length() == 0) {
-                        Toast.makeText(getApplicationContext(), R.string.ValidCity,
-                                Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    String[] place_names = new String[jsonArray.length()];
-                    String[] longitudes = new String[jsonArray.length()];
-                    String[] latitudes = new String[jsonArray.length()];
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject feature = jsonArray.getJSONObject(i);
-                        JSONObject geometry = feature.getJSONObject("geometry");
-                        place_names[i] = feature.getString("place_name");
-                        JSONArray coordinates = geometry.getJSONArray("coordinates");
-                        longitudes[i] = coordinates.getString(0);
-                        latitudes[i] = coordinates.getString(1);
-                    }
-                    intent.putExtra("CITY_NAMES", place_names);
-                    intent.putExtra("LONGITUDES", longitudes);
-                    intent.putExtra("LATITUDES", latitudes);
-
-                    startActivity(intent);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+                mapBoxParse(response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error instanceof NoConnectionError) {
-                    Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof TimeoutError) {
-                    Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof ServerError) {
-                    Toast.makeText(getApplicationContext(), R.string.error_server,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof NetworkError) {
-                    Toast.makeText(getApplicationContext(), R.string.error_network,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof ParseError) {
-                    Toast.makeText(getApplicationContext(), R.string.error_parse,
-                            Toast.LENGTH_SHORT).show();
-                }
+                errorHandler(error);
             }
         });
         queue.add(request);
+    }
+
+    private void mapBoxParse(JSONObject response){
+        try {
+            JSONArray jsonArray = response.getJSONArray("features");
+            if (jsonArray.length() == 0) {
+                Toast.makeText(getApplicationContext(), R.string.ValidCity,
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String[] place_names = new String[jsonArray.length()];
+            String[] longitudes = new String[jsonArray.length()];
+            String[] latitudes = new String[jsonArray.length()];
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject feature = jsonArray.getJSONObject(i);
+                JSONObject geometry = feature.getJSONObject("geometry");
+                place_names[i] = feature.getString("place_name");
+                JSONArray coordinates = geometry.getJSONArray("coordinates");
+                longitudes[i] = coordinates.getString(0);
+                latitudes[i] = coordinates.getString(1);
+            }
+
+            goSecondPage(place_names, longitudes, latitudes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void errorHandler(VolleyError error){
+        if (error instanceof NoConnectionError) {
+            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof TimeoutError) {
+            Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof ServerError) {
+            Toast.makeText(getApplicationContext(), R.string.error_server,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof NetworkError) {
+            Toast.makeText(getApplicationContext(), R.string.error_network,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof ParseError) {
+            Toast.makeText(getApplicationContext(), R.string.error_parse,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void goSecondPage(String[] place_names, String[] longitudes, String[] latitudes){
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra("CITY_NAMES", place_names);
+        intent.putExtra("LONGITUDES", longitudes);
+        intent.putExtra("LATITUDES", latitudes);
+
+        startActivity(intent);
     }
 }

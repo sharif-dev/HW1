@@ -3,7 +3,6 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -42,16 +41,7 @@ public class SecondActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         lstCity = new ArrayList<>();
 
-        String[] city_names = getIntent().getStringArrayExtra("CITY_NAMES");
-        String[] longitudes = getIntent().getStringArrayExtra("LONGITUDES");
-        String[] latitudes = getIntent().getStringArrayExtra("LATITUDES");
-        for (int i = 0; i < longitudes.length; i++) {
-            City city = new City();
-            city.setName(city_names[i]);
-            city.setLongitude(longitudes[i]);
-            city.setLatitude(latitudes[i]);
-            lstCity.add(city);
-        }
+        initialize();
         setupRecyclerView(lstCity);
 
         recyclerView.addOnItemTouchListener(
@@ -62,6 +52,19 @@ public class SecondActivity extends AppCompatActivity {
                     }
                 })
         );
+    }
+
+    private void initialize(){
+        String[] city_names = getIntent().getStringArrayExtra("CITY_NAMES");
+        String[] longitudes = getIntent().getStringArrayExtra("LONGITUDES");
+        String[] latitudes = getIntent().getStringArrayExtra("LATITUDES");
+        for (int i = 0; i < longitudes.length; i++) {
+            City city = new City();
+            city.setName(city_names[i]);
+            city.setLongitude(longitudes[i]);
+            city.setLatitude(latitudes[i]);
+            lstCity.add(city);
+        }
     }
 
     private void DarkSkyCall(int position){
@@ -75,53 +78,61 @@ public class SecondActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        try{
-                            String[] summaries = new String[7];
-                            String[] humidities = new String[7];
-                            String[] pressures = new String[7];
-                            String[] temperaturesMax = new String[7];
-                            String[] temperaturesMin = new String[7];
-                            String[] icons = new String[7];
-                            String[] times = new String[7];
-
-                            JSONArray data = response.getJSONObject("daily").getJSONArray("data");
-                            for(int i = 0; i < 7; i++){
-                                times[i] = data.getJSONObject(i).get("time").toString();
-                                summaries[i] = data.getJSONObject(i).getString("summary");
-                                icons[i] = data.getJSONObject(i).getString("icon");
-                                humidities[i] = data.getJSONObject(i).get("humidity").toString();
-                                pressures[i] = data.getJSONObject(i).get("pressure").toString();
-                                temperaturesMax[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
-                                temperaturesMin[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
-                            }
-
-                            goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
-                        }catch (JSONException e){
-                            e.printStackTrace();
-                        }
+                        DarkSkyParse(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if ( error instanceof NoConnectionError ){
-                    Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof TimeoutError ) {
-                    Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof ServerError) {
-                    Toast.makeText(getApplicationContext(), R.string.error_server,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof NetworkError) {
-                    Toast.makeText(getApplicationContext(), R.string.error_network,
-                            Toast.LENGTH_SHORT).show();
-                } else if (error instanceof ParseError) {
-                    Toast.makeText(getApplicationContext(), R.string.error_parse,
-                            Toast.LENGTH_SHORT).show();
-                }
+                errorHandler(error);
             }
         });
         queue.add(request);
+    }
+
+    private void DarkSkyParse(JSONObject response){
+        try{
+            String[] summaries = new String[7];
+            String[] humidities = new String[7];
+            String[] pressures = new String[7];
+            String[] temperaturesMax = new String[7];
+            String[] temperaturesMin = new String[7];
+            String[] icons = new String[7];
+            String[] times = new String[7];
+
+            JSONArray data = response.getJSONObject("daily").getJSONArray("data");
+            for(int i = 0; i < 7; i++){
+                times[i] = data.getJSONObject(i).get("time").toString();
+                summaries[i] = data.getJSONObject(i).getString("summary");
+                icons[i] = data.getJSONObject(i).getString("icon");
+                humidities[i] = data.getJSONObject(i).get("humidity").toString();
+                pressures[i] = data.getJSONObject(i).get("pressure").toString();
+                temperaturesMax[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
+                temperaturesMin[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
+            }
+
+            goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void errorHandler(VolleyError error){
+        if ( error instanceof NoConnectionError ){
+            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof TimeoutError ) {
+            Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof ServerError) {
+            Toast.makeText(getApplicationContext(), R.string.error_server,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof NetworkError) {
+            Toast.makeText(getApplicationContext(), R.string.error_network,
+                    Toast.LENGTH_SHORT).show();
+        } else if (error instanceof ParseError) {
+            Toast.makeText(getApplicationContext(), R.string.error_parse,
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void goFinalPage(String[] times, String[] summaries, String[] icons, String[] humidities,

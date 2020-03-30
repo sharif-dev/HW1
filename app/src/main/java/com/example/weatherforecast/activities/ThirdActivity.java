@@ -61,9 +61,9 @@ public class ThirdActivity extends AppCompatActivity {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, i);
             Date date = calendar.getTime();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEEE");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(getString(R.string.dayFormat));
             String day = simpleDateFormat.format(date);
-            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat(getString(R.string.dateFormat));
             String ourDate = simpleDateFormat1.format(date);
 
             WeatherCondition weatherCondition = new WeatherCondition();
