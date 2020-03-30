@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 if (city_name.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), R.string.nullCityName,
                             Toast.LENGTH_SHORT).show();
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
         ConnectivityManager cm =
             (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
         if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
             checkHistory();
         }
