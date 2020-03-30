@@ -1,6 +1,8 @@
 package com.example.weatherforecast.Listeners;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -11,7 +13,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     private OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        public void onItemClick(View view, int position);
+        void onItemClick(View view, int position);
     }
 
     private GestureDetector mGestureDetector;
@@ -36,7 +38,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
     }
 
     @Override
-    public void onTouchEvent(RecyclerView view, MotionEvent motionEvent) {
+    public void onTouchEvent(@NonNull RecyclerView view, @NonNull MotionEvent motionEvent) {
     }
 
     @Override

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -13,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.model.City;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
@@ -47,6 +48,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (mData.get(position).isClicked()) {
             holder.wait_txt.setVisibility(View.VISIBLE);
             holder.wait_p.setVisibility(View.VISIBLE);
+            blink(holder.wait_txt);
         } else {
             holder.wait_txt.setVisibility(View.INVISIBLE);
             holder.wait_p.setVisibility(View.INVISIBLE);
@@ -76,6 +78,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             wait_p = itemView.findViewById(R.id.pBar);
 
         }
+    }
+
+    private void blink(TextView txt) {
+        Animation animation = new AlphaAnimation(0.0f, 1.0f);
+        animation.setDuration(500);
+        animation.setRepeatMode(Animation.REVERSE);
+        animation.setRepeatCount(Animation.INFINITE);
+        txt.startAnimation(animation);
     }
 
 }

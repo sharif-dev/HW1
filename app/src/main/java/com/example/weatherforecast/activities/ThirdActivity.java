@@ -54,7 +54,6 @@ public class ThirdActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        String[] times = getIntent().getStringArrayExtra("TIMES");  //TODO
         String[] summaries = getIntent().getStringArrayExtra("SUMMARIES");
         String[] icons = getIntent().getStringArrayExtra("ICONS");
         String[] humidities = getIntent().getStringArrayExtra("HUMIDITIES");

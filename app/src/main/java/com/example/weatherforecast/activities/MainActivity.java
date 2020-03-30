@@ -1,6 +1,7 @@
 package com.example.weatherforecast.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -11,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -23,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherforecast.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,7 +33,6 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     private EditText city_name;
-    private Button search_button;
     private ProgressBar progressBar;
 
     @Override
@@ -38,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        city_name = (EditText) findViewById(R.id.city_edit_text);
-        search_button = (Button) findViewById(R.id.search);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        city_name = findViewById(R.id.city_edit_text);
+        Button search_button = findViewById(R.id.search);
+        progressBar = findViewById(R.id.progressBar);
 
         checkInternetConnection();
 
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                 if (city_name.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), R.string.nullCityName,
                             Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.INVISIBLE);
                 } else {
                     mapBoxCall();
                 }
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void checkInternetConnection() {
         ConnectivityManager cm =
-            (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
         if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
@@ -73,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ThirdActivity.class);
             intent.putExtra("ISCONNECTED", false);
             startActivity(intent);
-        }else {
+        } else {
             Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
                     Toast.LENGTH_SHORT).show();
         }
@@ -93,12 +96,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 errorHandler(error);
+                ProgressBar progressBar = findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.INVISIBLE);
             }
         });
         queue.add(request);
     }
 
-    private void mapBoxParse(JSONObject response){
+    private void mapBoxParse(JSONObject response) {
         try {
             JSONArray jsonArray = response.getJSONArray("features");
             if (jsonArray.length() == 0) {
@@ -125,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void errorHandler(VolleyError error){
+    private void errorHandler(VolleyError error) {
         if (error instanceof NoConnectionError) {
             Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
                     Toast.LENGTH_SHORT).show();
@@ -144,12 +149,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void goSecondPage(String[] place_names, String[] longitudes, String[] latitudes){
+    private void goSecondPage(String[] place_names, String[] longitudes, String[] latitudes) {
         Intent intent = new Intent(this, SecondActivity.class);
         intent.putExtra("CITY_NAMES", place_names);
         intent.putExtra("LONGITUDES", longitudes);
         intent.putExtra("LATITUDES", latitudes);
 
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }
