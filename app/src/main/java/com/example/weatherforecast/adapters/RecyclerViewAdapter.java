@@ -44,7 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.city_longitude.setText(mData.get(position).getLongitude());
         holder.city_latitude.setText(mData.get(position).getLatitude());
 
-        if (mData.get(position).getTxt_and_progressBar_visibility()) {
+        if (mData.get(position).isClicked()) {
             holder.wait_txt.setVisibility(View.VISIBLE);
             holder.wait_p.setVisibility(View.VISIBLE);
         } else {

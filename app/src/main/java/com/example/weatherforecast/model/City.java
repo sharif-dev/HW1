@@ -4,17 +4,10 @@ public class City {
     private String latitude;
     private String longitude;
     private String name;
-    private Boolean txt_and_progressBar_visibility;
-
-    public Boolean getTxt_and_progressBar_visibility() {
-        return txt_and_progressBar_visibility;
-    }
-
-    public void setTxt_and_progressBar_visibility(Boolean txt_and_progressBar_visibility) {
-        this.txt_and_progressBar_visibility = txt_and_progressBar_visibility;
-    }
+    private boolean isClicked;
 
     public City() {
+        this.isClicked = false;
     }
 
     public String getLatitude() {
@@ -39,5 +32,13 @@ public class City {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isClicked() {
+        return isClicked;
+    }
+
+    public void setClicked(boolean clicked) {
+        isClicked = clicked;
     }
 }

@@ -55,6 +55,11 @@ public class SecondActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(View view, int position) {
                         DarkSkyCall(position);
+                        City chosen = lstCity.get(position);
+                        chosen.setClicked(true);
+                        lstCity.clear();
+                        lstCity.add(chosen);
+                        setupRecyclerView(lstCity);
                     }
                 })
         );
@@ -69,15 +74,11 @@ public class SecondActivity extends AppCompatActivity {
             city.setName(city_names[i]);
             city.setLongitude(longitudes[i]);
             city.setLatitude(latitudes[i]);
-            city.setTxt_and_progressBar_visibility(false);
             lstCity.add(city);
         }
     }
 
     private void DarkSkyCall(int position) {
-
-        lstCity.get(position).setTxt_and_progressBar_visibility(true);
-        recyclerView.getAdapter().notifyItemChanged(position);
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getString(R.string.DarkSkyURL) +
