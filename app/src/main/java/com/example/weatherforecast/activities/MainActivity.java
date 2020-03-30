@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherforecast.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,22 +61,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void checkInternetConnection(){
+    public void checkInternetConnection() {
         ConnectivityManager cm =
-            (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()){
+        if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
             checkHistory();
+            Toast.makeText(this, "شما به اینترنت متصل نیستید !", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void checkHistory(){
-        if(getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE).getAll().size() == 0){
+    public void checkHistory() {
+        if (getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE).getAll().size() == 0) {
             Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
                     Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
                     Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(this, ThirdActivity.class);
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray jsonArray = response.getJSONArray("features");
-                    if(jsonArray.length() == 0){
+                    if (jsonArray.length() == 0) {
                         Toast.makeText(getApplicationContext(), R.string.ValidCity,
                                 Toast.LENGTH_SHORT).show();
                         return;
@@ -123,10 +125,10 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if ( error instanceof NoConnectionError ){
+                if (error instanceof NoConnectionError) {
                     Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
                             Toast.LENGTH_SHORT).show();
-                } else if (error instanceof TimeoutError ) {
+                } else if (error instanceof TimeoutError) {
                     Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
                             Toast.LENGTH_SHORT).show();
                 } else if (error instanceof ServerError) {
