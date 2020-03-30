@@ -11,7 +11,10 @@ import android.widget.Toast;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.DarkSkyViewAdapter;
 import com.example.weatherforecast.model.WeatherCondition;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,39 +84,15 @@ public class ThirdActivity extends AppCompatActivity {
     }
 
     private void lastSeen() {
-        for (int i = 0; i < 7; i++) {
-            String[] weather = sharedPreferences.getString("weather" + Integer.toString(i),
-                    null).split(getString(R.string.split_In_Filing));
-            WeatherCondition weatherCondition = new WeatherCondition();
-            weatherCondition.setDate(weather[0]);
-            weatherCondition.setDay(weather[1]);
-            weatherCondition.setSummary(weather[2]);
-            weatherCondition.setIcon(weather[3]);
-            weatherCondition.setHumidity(weather[4]);
-            weatherCondition.setPressure(weather[5]);
-            weatherCondition.setTemperatureMax(weather[6]);
-            weatherCondition.setTemperatureMin(weather[7]);
-
-            lstWeathers.add(weatherCondition);
-        }
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("lstWeathers", null);
+        Type type = new TypeToken<ArrayList<WeatherCondition>>() {}.getType();
+        lstWeathers = gson.fromJson(json, type);
     }
 
     private void save() {
-        SharedPreferences.Editor editor = sharedPreferences.edit().clear();
-
-        for (int i = 0; i < lstWeathers.size(); i++) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(lstWeathers.get(i).getDate() + getString(R.string.split_In_Filing));
-            stringBuilder.append(lstWeathers.get(i).getDay() + getString(R.string.split_In_Filing));
-            stringBuilder.append(lstWeathers.get(i).getSummary() + getString(R.string.split_In_Filing));
-            stringBuilder.append(lstWeathers.get(i).getIcon() + getString(R.string.split_In_Filing));
-            stringBuilder.append(lstWeathers.get(i).getHumidity() + getString(R.string.split_In_Filing));
-            stringBuilder.append(lstWeathers.get(i).getPressure() + getString(R.string.split_In_Filing));
-            stringBuilder.append(lstWeathers.get(i).getTemperatureMax() + getString(R.string.split_In_Filing));
-            stringBuilder.append(lstWeathers.get(i).getTemperatureMin());
-
-            editor.putString("weather" + Integer.toString(i), stringBuilder.toString());
-        }
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("lstWeathers", new Gson().toJson(lstWeathers));
         editor.apply();
     }
 
