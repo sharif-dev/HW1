@@ -68,20 +68,17 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
             checkHistory();
-            Toast.makeText(this, "شما به اینترنت متصل نیستید !", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void checkHistory() {
-        if (getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE).getAll().size() == 0) {
-            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
-                    Toast.LENGTH_SHORT).show();
+        if (getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE).getAll().size() != 0) {
             Intent intent = new Intent(this, ThirdActivity.class);
             intent.putExtra("ISCONNECTED", false);
             startActivity(intent);
+        }else {
+            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                    Toast.LENGTH_SHORT).show();
         }
     }
 

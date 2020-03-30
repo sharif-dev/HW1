@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.DarkSkyViewAdapter;
@@ -35,6 +36,8 @@ public class ThirdActivity extends AppCompatActivity {
         if (getIntent().getBooleanExtra("ISCONNECTED", true)) {
             initialize();
         } else {
+            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                Toast.LENGTH_SHORT).show();
             lastSeen();
         }
         setupRecyclerView(lstWeathers);
@@ -62,6 +65,7 @@ public class ThirdActivity extends AppCompatActivity {
             String day = simpleDateFormat.format(date);
             SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
             String ourDate = simpleDateFormat1.format(date);
+
             WeatherCondition weatherCondition = new WeatherCondition();
             weatherCondition.setDate(ourDate);
             weatherCondition.setDay(day);
@@ -81,8 +85,8 @@ public class ThirdActivity extends AppCompatActivity {
             String[] weather = sharedPreferences.getString("weather" + Integer.toString(i),
                     null).split(getString(R.string.split_In_Filing));
             WeatherCondition weatherCondition = new WeatherCondition();
-            weatherCondition.setDate(weather[0]);   //TODO
-            weatherCondition.setDay(weather[1]);    //TODO
+            weatherCondition.setDate(weather[0]);
+            weatherCondition.setDay(weather[1]);
             weatherCondition.setSummary(weather[2]);
             weatherCondition.setIcon(weather[3]);
             weatherCondition.setHumidity(weather[4]);
