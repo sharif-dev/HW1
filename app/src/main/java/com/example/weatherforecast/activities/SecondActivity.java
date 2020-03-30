@@ -3,12 +3,14 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -24,9 +26,11 @@ import com.example.weatherforecast.Listeners.RecyclerItemClickListener;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.RecyclerViewAdapter;
 import com.example.weatherforecast.model.City;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +60,7 @@ public class SecondActivity extends AppCompatActivity {
         );
     }
 
-    private void initialize(){
+    private void initialize() {
         String[] city_names = getIntent().getStringArrayExtra("CITY_NAMES");
         String[] longitudes = getIntent().getStringArrayExtra("LONGITUDES");
         String[] latitudes = getIntent().getStringArrayExtra("LATITUDES");
@@ -65,11 +69,15 @@ public class SecondActivity extends AppCompatActivity {
             city.setName(city_names[i]);
             city.setLongitude(longitudes[i]);
             city.setLatitude(latitudes[i]);
+            city.setTxt_and_progressBar_visibility(false);
             lstCity.add(city);
         }
     }
 
-    private void DarkSkyCall(int position){
+    private void DarkSkyCall(int position) {
+
+        lstCity.get(position).setTxt_and_progressBar_visibility(true);
+        recyclerView.getAdapter().notifyItemChanged(position);
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getString(R.string.DarkSkyURL) +
@@ -91,8 +99,8 @@ public class SecondActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void DarkSkyParse(JSONObject response){
-        try{
+    private void DarkSkyParse(JSONObject response) {
+        try {
             String[] summaries = new String[7];
             String[] humidities = new String[7];
             String[] pressures = new String[7];
@@ -102,7 +110,7 @@ public class SecondActivity extends AppCompatActivity {
             String[] times = new String[7];
 
             JSONArray data = response.getJSONObject("daily").getJSONArray("data");
-            for(int i = 0; i < 7; i++){
+            for (int i = 0; i < 7; i++) {
                 times[i] = data.getJSONObject(i).get("time").toString();
                 summaries[i] = data.getJSONObject(i).getString("summary");
                 icons[i] = data.getJSONObject(i).getString("icon");
@@ -113,16 +121,16 @@ public class SecondActivity extends AppCompatActivity {
             }
 
             goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
-        }catch (JSONException e){
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void errorHandler(VolleyError error){
-        if ( error instanceof NoConnectionError ){
+    private void errorHandler(VolleyError error) {
+        if (error instanceof NoConnectionError) {
             Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
                     Toast.LENGTH_SHORT).show();
-        } else if (error instanceof TimeoutError ) {
+        } else if (error instanceof TimeoutError) {
             Toast.makeText(getApplicationContext(), R.string.error_network_timeout,
                     Toast.LENGTH_SHORT).show();
         } else if (error instanceof ServerError) {
@@ -138,7 +146,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void goFinalPage(String[] times, String[] summaries, String[] icons, String[] humidities,
-                         String[] pressures, String[] temperaturesMax, String[] temperaturesMin){
+                             String[] pressures, String[] temperaturesMax, String[] temperaturesMin) {
         Intent intent = new Intent(this, ThirdActivity.class);
         intent.putExtra("TIMES", times);
         intent.putExtra("SUMMARIES", summaries);
@@ -159,7 +167,7 @@ public class SecondActivity extends AppCompatActivity {
         recyclerView.setAdapter(myAdapter);
     }
 
-    public String fahrenheitToCelsius(Double temperature){
-        return Integer.toString( (int) Math.round((temperature - 32) * 5 / 9));
+    public String fahrenheitToCelsius(Double temperature) {
+        return Integer.toString((int) Math.round((temperature - 32) * 5 / 9));
     }
 }
