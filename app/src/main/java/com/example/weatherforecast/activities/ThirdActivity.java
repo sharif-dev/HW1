@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -40,7 +41,7 @@ public class ThirdActivity extends AppCompatActivity {
             initialize();
         } else {
             Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
-                Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
             lastSeen();
         }
         setupRecyclerView(lstWeathers);
@@ -86,7 +87,8 @@ public class ThirdActivity extends AppCompatActivity {
     private void lastSeen() {
         Gson gson = new Gson();
         String json = sharedPreferences.getString("lstWeathers", null);
-        Type type = new TypeToken<ArrayList<WeatherCondition>>() {}.getType();
+        Type type = new TypeToken<ArrayList<WeatherCondition>>() {
+        }.getType();
         lstWeathers = gson.fromJson(json, type);
     }
 
@@ -101,5 +103,11 @@ public class ThirdActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         recyclerView.setAdapter(myAdapter);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
