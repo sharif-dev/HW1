@@ -109,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
             if (jsonArray.length() == 0) {
                 Toast.makeText(getApplicationContext(), R.string.ValidCity,
                         Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.INVISIBLE);
+                city_name.setText("");
+                city_name.setText("");
                 return;
             }
 
