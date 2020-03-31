@@ -162,7 +162,13 @@ public class SecondActivity extends AppCompatActivity {
     private void setupRecyclerView(List<City> lstCity) {
         RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(this, lstCity);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+        recyclerView.setVisibility(View.INVISIBLE);
+        recyclerView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView.setVisibility(View.VISIBLE);
+            }
+        }, 500);
         recyclerView.setAdapter(myAdapter);
     }
 
