@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,42 +44,66 @@ public class MainActivity extends AppCompatActivity {
         city_name = findViewById(R.id.city_edit_text);
         Button search_button = findViewById(R.id.search);
         progressBar = findViewById(R.id.progressBar);
-
-        checkInternetConnection();
+        final Handler handler = new Handler(getMainLooper());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                checkInternetConnection(handler);
+            }
+        }).start();
 
         search_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressBar.setVisibility(View.VISIBLE);
-                if (city_name.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), R.string.nullCityName,
-                            Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.INVISIBLE);
-                } else {
-                    mapBoxCall();
-                }
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (city_name.getText().toString().matches("")) {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getApplicationContext(), R.string.nullCityName,
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    progressBar.setVisibility(View.VISIBLE);
+                                }
+                            });
+                            mapBoxCall();
+                        }
+                    }
+                }).start();
             }
         });
     }
 
-    public void checkInternetConnection() {
+    public void checkInternetConnection(Handler handler) {
         ConnectivityManager cm =
                 (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
         if (activeNetwork == null || !activeNetwork.isConnectedOrConnecting()) {
-            checkHistory();
+            checkHistory(handler);
         }
     }
 
-    public void checkHistory() {
+    public void checkHistory(Handler handler) {
         if (getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE).getAll().size() != 0) {
             Intent intent = new Intent(this, ThirdActivity.class);
             intent.putExtra("ISCONNECTED", false);
             startActivity(intent);
         } else {
-            Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
-                    Toast.LENGTH_SHORT).show();
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), R.string.NoNetworkConnection,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
