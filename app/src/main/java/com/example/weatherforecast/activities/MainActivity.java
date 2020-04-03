@@ -9,6 +9,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                                     progressBar.setVisibility(View.VISIBLE);
                                 }
                             });
+                            city_name.onEditorAction(EditorInfo.IME_ACTION_DONE);
                             mapBoxCall();
                         }
                     }

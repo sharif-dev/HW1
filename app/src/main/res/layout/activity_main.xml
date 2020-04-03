@@ -59,5 +59,10 @@
         android:textColor="@color/white"
         android:textSize="20sp" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search"
+        android:layout_margin="60dp" />
 
 </RelativeLayout>
