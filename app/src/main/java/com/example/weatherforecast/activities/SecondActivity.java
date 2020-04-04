@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
@@ -44,20 +45,31 @@ public class SecondActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         lstCity = new ArrayList<>();
+        final Handler handler = new Handler();
 
         initialize();
         setupRecyclerView(lstCity);
-
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(getApplicationContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
-                    public void onItemClick(View view, int position) {
-                        DarkSkyCall(position);
-                        City chosen = lstCity.get(position);
-                        chosen.setClicked(true);
-                        lstCity.clear();
-                        lstCity.add(chosen);
-                        setupRecyclerView(lstCity);
+                    public void onItemClick(View view, final int position) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                DarkSkyCall(position);
+                                handler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        City chosen = lstCity.get(position);
+                                        chosen.setClicked(true);
+                                        lstCity.clear();
+                                        lstCity.add(chosen);
+                                        setupRecyclerView(lstCity);
+                                    }
+                                });
+                            }
+                        }).start();
+
                     }
                 })
         );

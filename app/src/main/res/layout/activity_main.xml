@@ -58,6 +58,6 @@
         android:text="جستجو"
         android:textColor="@color/white"
         android:textSize="20sp" />
-    
+
 
 </RelativeLayout>
