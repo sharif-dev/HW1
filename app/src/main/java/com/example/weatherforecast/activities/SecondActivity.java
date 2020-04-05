@@ -38,6 +38,7 @@ public class SecondActivity extends AppCompatActivity {
     private List<City> lstCity;
     private City chosen;
     private RecyclerView recyclerView;
+    private String cityName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +64,6 @@ public class SecondActivity extends AppCompatActivity {
                                     public void run() {
                                         chosen = lstCity.get(position);
                                         chosen.setClicked(true);
-                                        lstCity.clear();
-                                        lstCity.add(chosen);
                                         setupRecyclerView(lstCity);
                                     }
                                 });
@@ -101,22 +100,21 @@ public class SecondActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONObject response) {
                         String[] strArray = lstCity.get(position).getName().split(",");
-                        DarkSkyParse(response, strArray[0]);
+                        cityName = strArray[0];
+                        DarkSkyParse(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 errorHandler(error);
                 chosen.setClicked(false);
-                lstCity.clear();
-                lstCity.add(chosen);
                 setupRecyclerView(lstCity);
             }
         });
         queue.add(request);
     }
 
-    private void DarkSkyParse(JSONObject response, String cityName) {
+    private void DarkSkyParse(JSONObject response) {
         try {
             String[] summaries = new String[7];
             String[] humidities = new String[7];
@@ -136,10 +134,8 @@ public class SecondActivity extends AppCompatActivity {
                 temperaturesMax[i] = "max temperature: " + fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
                 temperaturesMin[i] = "min temperature: " + fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
             }
-            goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin, cityName);
+            goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
             chosen.setClicked(false);
-            lstCity.clear();
-            lstCity.add(chosen);
             setupRecyclerView(lstCity);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -166,7 +162,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void goFinalPage(String[] times, String[] summaries, String[] icons, String[] humidities,
-                             String[] pressures, String[] temperaturesMax, String[] temperaturesMin, String cityName) {
+                             String[] pressures, String[] temperaturesMax, String[] temperaturesMin) {
         Intent intent = new Intent(this, ThirdActivity.class);
         intent.putExtra("TIMES", times);
         intent.putExtra("SUMMARIES", summaries);

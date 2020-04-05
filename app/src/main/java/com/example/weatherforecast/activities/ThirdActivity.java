@@ -109,5 +109,4 @@ public class ThirdActivity extends AppCompatActivity {
         recyclerView.setAdapter(myAdapter);
     }
 
-
 }
