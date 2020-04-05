@@ -14,5 +14,5 @@
         android:layout_margin="8dp">
 
     </androidx.recyclerview.widget.RecyclerView>
-    
+
 </RelativeLayout>

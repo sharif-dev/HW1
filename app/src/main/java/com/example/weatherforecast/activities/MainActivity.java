@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -27,25 +30,37 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.weatherforecast.R;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+
 
 public class MainActivity extends AppCompatActivity {
-    private EditText city_name;
+    private AutoCompleteTextView city_name;
     private ProgressBar progressBar;
+    private ArrayList<String> cities_string;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        city_name = findViewById(R.id.city_edit_text);
+
         Button search_button = findViewById(R.id.search);
         progressBar = findViewById(R.id.progressBar);
+        loadData();
+        city_name = findViewById(R.id.city_edit_text);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cities_string);
+        city_name.setAdapter(adapter);
         final Handler handler = new Handler(getMainLooper());
+
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -72,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     progressBar.setVisibility(View.VISIBLE);
+                                    cities_string.add(city_name.getText().toString());
+                                    saveData();
                                 }
                             });
                             city_name.onEditorAction(EditorInfo.IME_ACTION_DONE);
@@ -81,6 +98,27 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         });
+    }
+
+    private void saveData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(cities_string);
+        editor.putString("cities", json);
+        editor.apply();
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences("shared preferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("cities", null);
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
+        cities_string = gson.fromJson(json, type);
+        if (cities_string == null) {
+            cities_string = new ArrayList<String>();
+        }
     }
 
     public void checkInternetConnection(Handler handler) {
