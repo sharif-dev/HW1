@@ -134,7 +134,7 @@ public class SecondActivity extends AppCompatActivity {
                 humidities[i] = "humidity: " + data.getJSONObject(i).get("humidity").toString();
                 pressures[i] = "pressure: " + data.getJSONObject(i).get("pressure").toString();
                 temperaturesMax[i] = "max temperature: " + fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
-                temperaturesMin[i] = "min temperature" + fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
+                temperaturesMin[i] = "min temperature: " + fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
             }
             goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin, cityName);
             chosen.setClicked(false);
