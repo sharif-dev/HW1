@@ -104,9 +104,5 @@ public class ThirdActivity extends AppCompatActivity {
         recyclerView.setAdapter(myAdapter);
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
+
 }

@@ -187,10 +187,4 @@ public class SecondActivity extends AppCompatActivity {
     public String fahrenheitToCelsius(Double temperature) {
         return Integer.toString((int) Math.round((temperature - 32) * 5 / 9));
     }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 }
