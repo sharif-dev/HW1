@@ -138,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.INVISIBLE);
                 city_name.setText("");
-                city_name.setText("");
                 return;
             }
 
@@ -153,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                 longitudes[i] = coordinates.getString(0);
                 latitudes[i] = coordinates.getString(1);
             }
-
+            progressBar.setVisibility(View.INVISIBLE);
             goSecondPage(place_names, longitudes, latitudes);
         } catch (JSONException e) {
             e.printStackTrace();

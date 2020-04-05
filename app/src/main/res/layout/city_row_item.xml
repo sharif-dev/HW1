@@ -71,7 +71,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed-medium"
             android:gravity="center"
-            android:text="لطفا کمی صبر کنید..."
+            android:text="@string/pleaseWait"
             android:textColor="#EF0606" />
 
         <ProgressBar

@@ -3,13 +3,11 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
-
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -25,17 +23,16 @@ import com.example.weatherforecast.Listeners.RecyclerItemClickListener;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.RecyclerViewAdapter;
 import com.example.weatherforecast.model.City;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class SecondActivity extends AppCompatActivity {
     private List<City> lstCity;
+    private City chosen;
     private RecyclerView recyclerView;
 
     @Override
@@ -60,8 +57,8 @@ public class SecondActivity extends AppCompatActivity {
                                 handler.post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        City chosen = lstCity.get(position);
-                                        chosen.setClicked(true);
+                                        chosen = lstCity.get(position);
+                                      chosen.setClicked(true);
                                         lstCity.clear();
                                         lstCity.add(chosen);
                                         setupRecyclerView(lstCity);
@@ -105,6 +102,10 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 errorHandler(error);
+                chosen.setClicked(false);
+                lstCity.clear();
+                lstCity.add(chosen);
+                setupRecyclerView(lstCity);
             }
         });
         queue.add(request);
@@ -130,8 +131,11 @@ public class SecondActivity extends AppCompatActivity {
                 temperaturesMax[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
                 temperaturesMin[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
             }
-
             goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
+            chosen.setClicked(false);
+            lstCity.clear();
+            lstCity.add(chosen);
+            setupRecyclerView(lstCity);
         } catch (JSONException e) {
             e.printStackTrace();
         }

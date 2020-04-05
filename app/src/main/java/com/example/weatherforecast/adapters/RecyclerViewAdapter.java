@@ -53,7 +53,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             holder.wait_txt.setVisibility(View.INVISIBLE);
             holder.wait_p.setVisibility(View.INVISIBLE);
         }
-
     }
 
     @Override

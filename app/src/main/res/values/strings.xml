@@ -9,10 +9,10 @@
     <string name="error_parse">parse error</string>
     <string name="DarkSkyURL">https://api.darksky.net/forecast/</string>
     <string name="DarkSkySecretKey">c0363c434af5d6b11a443146e9bc0337</string>
-    <string name="split_In_Filing">###</string>
     <string name="NoNetworkConnection">No Network Connection</string>
     <string name="SharedPreferencesInstance">mySharedPref</string>
     <string name="ValidCity">No Such City</string>
     <string name="dayFormat">EEEE</string>
     <string name="dateFormat">yyyy-MM-dd</string>
+    <string name="pleaseWait">لطفا کمی صبر کنید...</string>
 </resources>
