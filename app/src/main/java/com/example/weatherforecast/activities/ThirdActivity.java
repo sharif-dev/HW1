@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.weatherforecast.R;
@@ -27,15 +28,17 @@ public class ThirdActivity extends AppCompatActivity {
     private List<WeatherCondition> lstWeathers;
     private RecyclerView recyclerView;
     private SharedPreferences sharedPreferences;
+    private TextView cityNameTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_third);
 
-        recyclerView = (RecyclerView) findViewById(R.id.thirdPage_recyclerView);
+        recyclerView = findViewById(R.id.thirdPage_recyclerView);
         lstWeathers = new ArrayList<>();
         sharedPreferences = getSharedPreferences(getString(R.string.SharedPreferencesInstance), MODE_PRIVATE);
+        cityNameTextView = findViewById(R.id.weather_city_name);
 
         if (getIntent().getBooleanExtra("ISCONNECTED", true)) {
             initialize();
@@ -60,6 +63,8 @@ public class ThirdActivity extends AppCompatActivity {
         String[] pressures = getIntent().getStringArrayExtra("PRESSURES");
         String[] temperaturesMax = getIntent().getStringArrayExtra("TEMPERATURESMAX");
         String[] temperaturesMin = getIntent().getStringArrayExtra("TEMPERATURESMIN");
+        String cityName = getIntent().getStringExtra("CITYNAME");
+        cityNameTextView.setText(cityName);
         for (int i = 0; i < summaries.length; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, i);

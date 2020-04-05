@@ -3,11 +3,13 @@ package com.example.weatherforecast.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
+
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
 import com.android.volley.ParseError;
@@ -23,9 +25,11 @@ import com.example.weatherforecast.Listeners.RecyclerItemClickListener;
 import com.example.weatherforecast.R;
 import com.example.weatherforecast.adapters.RecyclerViewAdapter;
 import com.example.weatherforecast.model.City;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +62,7 @@ public class SecondActivity extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         chosen = lstCity.get(position);
-                                      chosen.setClicked(true);
+                                        chosen.setClicked(true);
                                         lstCity.clear();
                                         lstCity.add(chosen);
                                         setupRecyclerView(lstCity);
@@ -85,7 +89,7 @@ public class SecondActivity extends AppCompatActivity {
         }
     }
 
-    private void DarkSkyCall(int position) {
+    private void DarkSkyCall(final int position) {
 
         RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
         String url = getString(R.string.DarkSkyURL) +
@@ -96,7 +100,8 @@ public class SecondActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        DarkSkyParse(response);
+                        String[] strArray = lstCity.get(position).getName().split(",");
+                        DarkSkyParse(response, strArray[0]);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -111,7 +116,7 @@ public class SecondActivity extends AppCompatActivity {
         queue.add(request);
     }
 
-    private void DarkSkyParse(JSONObject response) {
+    private void DarkSkyParse(JSONObject response, String cityName) {
         try {
             String[] summaries = new String[7];
             String[] humidities = new String[7];
@@ -126,12 +131,12 @@ public class SecondActivity extends AppCompatActivity {
                 times[i] = data.getJSONObject(i).get("time").toString();
                 summaries[i] = data.getJSONObject(i).getString("summary");
                 icons[i] = data.getJSONObject(i).getString("icon");
-                humidities[i] = data.getJSONObject(i).get("humidity").toString();
-                pressures[i] = data.getJSONObject(i).get("pressure").toString();
-                temperaturesMax[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
-                temperaturesMin[i] = fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
+                humidities[i] = "humidity: " + data.getJSONObject(i).get("humidity").toString();
+                pressures[i] = "pressure: " + data.getJSONObject(i).get("pressure").toString();
+                temperaturesMax[i] = "max temperature: " + fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMax"));
+                temperaturesMin[i] = "min temperature" + fahrenheitToCelsius(data.getJSONObject(i).getDouble("temperatureMin"));
             }
-            goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
+            goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin, cityName);
             chosen.setClicked(false);
             lstCity.clear();
             lstCity.add(chosen);
@@ -161,7 +166,7 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void goFinalPage(String[] times, String[] summaries, String[] icons, String[] humidities,
-                             String[] pressures, String[] temperaturesMax, String[] temperaturesMin) {
+                             String[] pressures, String[] temperaturesMax, String[] temperaturesMin, String cityName) {
         Intent intent = new Intent(this, ThirdActivity.class);
         intent.putExtra("TIMES", times);
         intent.putExtra("SUMMARIES", summaries);
@@ -170,7 +175,7 @@ public class SecondActivity extends AppCompatActivity {
         intent.putExtra("PRESSURES", pressures);
         intent.putExtra("TEMPERATURESMAX", temperaturesMax);
         intent.putExtra("TEMPERATURESMIN", temperaturesMin);
-
+        intent.putExtra("CITYNAME", cityName);
         intent.putExtra("ISCONNECTED", true);
         startActivity(intent);
     }
