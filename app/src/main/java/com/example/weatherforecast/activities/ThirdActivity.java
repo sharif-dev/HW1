@@ -47,6 +47,7 @@ public class ThirdActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             lastSeen();
         }
+        cityNameTextView.setText(lstWeathers.get(0).getCityName());
         setupRecyclerView(lstWeathers);
     }
 
@@ -64,7 +65,7 @@ public class ThirdActivity extends AppCompatActivity {
         String[] temperaturesMax = getIntent().getStringArrayExtra("TEMPERATURESMAX");
         String[] temperaturesMin = getIntent().getStringArrayExtra("TEMPERATURESMIN");
         String cityName = getIntent().getStringExtra("CITYNAME");
-        cityNameTextView.setText(cityName);
+//        cityNameTextView.setText(cityName);
         for (int i = 0; i < summaries.length; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, i);
@@ -83,6 +84,7 @@ public class ThirdActivity extends AppCompatActivity {
             weatherCondition.setPressure(pressures[i]);
             weatherCondition.setTemperatureMax(temperaturesMax[i]);
             weatherCondition.setTemperatureMin(temperaturesMin[i]);
+            weatherCondition.setCityName(cityName);
 
             lstWeathers.add(weatherCondition);
         }

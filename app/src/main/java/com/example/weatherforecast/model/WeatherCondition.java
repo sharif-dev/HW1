@@ -9,6 +9,7 @@ public class WeatherCondition {
     private String icon;
     private String day;
     private String date;
+    private String cityName;
 
     public WeatherCondition() {
     }
@@ -75,5 +76,13 @@ public class WeatherCondition {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 }
