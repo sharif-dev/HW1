@@ -88,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     progressBar.setVisibility(View.VISIBLE);
-                                    cities_string.add(city_name.getText().toString());
+                                    if (!cities_string.contains(city_name.getText().toString())) {
+                                        cities_string.add(city_name.getText().toString());
+                                    }
                                     saveData();
                                 }
                             });
