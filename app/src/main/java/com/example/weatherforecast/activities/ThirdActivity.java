@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class ThirdActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SharedPreferences sharedPreferences;
     private TextView cityNameTextView;
+    final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,12 @@ public class ThirdActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        save();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                save();
+            }
+        }).start();
     }
 
     private void initialize() {
@@ -65,7 +72,6 @@ public class ThirdActivity extends AppCompatActivity {
         String[] temperaturesMax = getIntent().getStringArrayExtra("TEMPERATURESMAX");
         String[] temperaturesMin = getIntent().getStringArrayExtra("TEMPERATURESMIN");
         String cityName = getIntent().getStringExtra("CITYNAME");
-//        cityNameTextView.setText(cityName);
         for (int i = 0; i < summaries.length; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, i);
