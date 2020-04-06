@@ -10,7 +10,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/thirdPage_recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="match_parent"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="8dp"
@@ -23,8 +23,9 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="8dp"
+        android:gravity="center"
         android:fontFamily="serif"
         android:text="Tehran"
-        android:textColor="#9F9111"
+        android:textColor="@color/black"
         android:textSize="24sp" />
 </RelativeLayout>
