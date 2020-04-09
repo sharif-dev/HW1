@@ -36,6 +36,7 @@ import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
     private List<City> lstCity;
+    private List<City> chosenList;
     private City chosen;
     private RecyclerView recyclerView;
     private String cityName;
@@ -47,6 +48,7 @@ public class SecondActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerView);
         lstCity = new ArrayList<>();
+        chosenList = new ArrayList<>();
         final Handler handler = new Handler();
 
         initialize();
@@ -64,7 +66,8 @@ public class SecondActivity extends AppCompatActivity {
                                     public void run() {
                                         chosen = lstCity.get(position);
                                         chosen.setClicked(true);
-                                        setupRecyclerView(lstCity);
+                                        chosenList.add(chosen);
+                                        setupRecyclerView(chosenList);
                                     }
                                 });
                             }
@@ -107,6 +110,7 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 errorHandler(error);
+                chosenList.clear();
                 chosen.setClicked(false);
                 setupRecyclerView(lstCity);
             }
@@ -136,6 +140,7 @@ public class SecondActivity extends AppCompatActivity {
             }
             goFinalPage(times, summaries, icons, humidities, pressures, temperaturesMax, temperaturesMin);
             chosen.setClicked(false);
+            chosenList.clear();
             setupRecyclerView(lstCity);
         } catch (JSONException e) {
             e.printStackTrace();

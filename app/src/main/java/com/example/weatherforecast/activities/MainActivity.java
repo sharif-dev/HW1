@@ -14,9 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.NetworkError;
@@ -57,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         loadData();
         city_name = findViewById(R.id.city_edit_text);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, cities_string);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, cities_string);
         city_name.setAdapter(adapter);
         final Handler handler = new Handler(getMainLooper());
 
@@ -120,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         }.getType();
         cities_string = gson.fromJson(json, type);
         if (cities_string == null) {
-            cities_string = new ArrayList<String>();
+            cities_string = new ArrayList<>();
         }
     }
 

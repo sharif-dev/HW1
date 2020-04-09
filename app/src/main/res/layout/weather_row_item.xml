@@ -41,7 +41,8 @@
         android:gravity="center"
         android:lineSpacingExtra="10sp"
         android:text="خلاصه"
-        android:textColor="@color/white" />
+        android:textColor="#61142E"
+        android:typeface="serif" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,6 +56,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="بیشینه دما"
+            android:textColor="#322323"
             android:textSize="16sp" />
 
         <TextView
@@ -63,6 +65,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="کمینه دما"
+            android:textColor="#322323"
             android:textSize="16sp" />
     </LinearLayout>
 
